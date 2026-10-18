@@ -1,39 +1,29 @@
 var builder = WebApplication.CreateBuilder(args);
 
+// 起動時刻を保持するサービスを DI に登録
 builder.Services.AddSingleton<StartTimeService>();
+
+// 既存のサービス登録（例）
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-
-
-// Configure the HTTP request pipeline.
+// 既存のミドルウェア構成（テンプレート標準想定）
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
 
-app.MapGet("/server-info", () =>
-{
-    return new
-    {
-        Port = app.Urls.FirstOrDefault(),
-        Time = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"),
-        OS = System.Runtime.InteropServices.RuntimeInformation.OSDescription,
-        Framework = System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription
-    };
-});
-
-
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 
 app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapStaticAssets();
-app.MapRazorPages()
-   .WithStaticAssets();
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
