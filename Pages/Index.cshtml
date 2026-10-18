@@ -1,10 +1,51 @@
-﻿@page
+@page
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
+}
+
+@inject DateTime startTime
+
+@{
+    // Razor で起動時刻を JS に渡すために文字列化
+    var startTimeString = startTime.ToString("yyyy-MM-dd HH:mm:ss");
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome To MyPage</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+<hr />
+
+<h2>起動からの経過時間</h2>
+
+<div id="elapsedBox" style="background:#eee;padding:10px;border-radius:5px;width:300px;">
+    <p id="elapsed">計算中...</p>
+</div>
+
+<script>
+    // Razor から受け取った起動時刻
+    const startTime = new Date("@startTimeString");
+
+    function updateElapsed() {
+        const now = new Date();
+        const diff = now - startTime; // ミリ秒差
+
+        const seconds = Math.floor(diff / 1000) % 60;
+        const minutes = Math.floor(diff / 1000 / 60) % 60;
+        const hours = Math.floor(diff / 1000 / 60 / 60);
+        const days = Math.floor(hours / 24);
+
+        const text =
+            `${days}日 ${hours % 24}時間 ${minutes}分 ${seconds}秒`;
+
+        document.getElementById("elapsed").innerText = text;
+    }
+
+    // 1秒ごとに更新
+    setInterval(updateElapsed, 1000);
+
+    // 初回表示
+    updateElapsed();
+</script>
