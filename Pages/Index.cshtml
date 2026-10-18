@@ -4,11 +4,11 @@
     ViewData["Title"] = "Home page";
 }
 
-@inject DateTime startTime
+@inject StartTimeService StartTimeService
 
 @{
     // Razor で起動時刻を JS に渡すために文字列化
-    var startTimeString = startTime.ToString("yyyy-MM-dd HH:mm:ss");
+    var startTimeString = StartTimeService.StartTime.ToString("yyyy-MM-dd HH:mm:ss");
 }
 
 <div class="text-center">
@@ -20,7 +20,7 @@
 
 <h2>起動からの経過時間</h2>
 
-<div id="elapsedBox" style="background:#eee;padding:10px;border-radius:5px;width:300px;">
+<div id="elapsedBox" style="background:#eee;padding:10px;border-radius:5px;width:300px;margin:0 auto;">
     <p id="elapsed">計算中...</p>
 </div>
 
