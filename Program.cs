@@ -1,9 +1,9 @@
 var builder = WebApplication.CreateBuilder(args);
 
-var startTime = DateTime.Now;
-builder.Services.AddSingleton(startTime);
+builder.Services.AddSingleton<StartTimeService>();
 
 var app = builder.Build();
+
 
 
 // Configure the HTTP request pipeline.
